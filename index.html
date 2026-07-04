@@ -3,83 +3,163 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login</title>
+<title>A letter for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@600;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1720; --card:#182430; --ink:#eaf0f6; --muted:#9fb0c0;
-    --accent:#4f9cf9; --accent-ink:#ffffff; --err:#ff6b6b; --line:#2a3a49;
+    --paper:#f7efdb;
+    --paper-edge:#efe4c6;
+    --ink:#243056;        /* fountain-pen blue-black */
+    --ink-soft:#4a5578;
+    --seal:#b5482f;       /* wax-seal terracotta */
+    --line:#d9cba6;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:radial-gradient(1200px 600px at 50% -10%,#1b2a3a,var(--bg));
-    color:var(--ink); display:grid; place-items:center; padding:24px;
+    margin:0;
+    font-family:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 700px at 50% -15%, #efdfba, #e6d4a9 60%, #dcc794);
+    min-height:100%;
+    display:grid; place-items:center;
+    padding:24px 16px;
   }
-  .card{
-    width:100%; max-width:380px; background:var(--card); border:1px solid var(--line);
-    border-radius:16px; padding:32px 28px; box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+  /* ---------- shared paper sheet ---------- */
+  .sheet{
+    width:100%; max-width:560px;
+    background:linear-gradient(180deg, var(--paper), var(--paper-edge));
+    border-radius:6px;
+    padding:44px 40px 40px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.6) inset,
+      0 18px 40px rgba(80,60,20,.28),
+      0 3px 8px rgba(80,60,20,.18);
+    position:relative;
   }
-  h1{margin:0 0 4px; font-size:22px; letter-spacing:.2px}
-  p.sub{margin:0 0 22px; color:var(--muted); font-size:14px}
-  label{display:block; font-size:13px; color:var(--muted); margin:0 0 6px}
-  input[type=password],input[type=text]{
-    width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--line);
-    background:#0e1620; color:var(--ink); font-size:15px; outline:none;
+  .sheet::after{ /* soft deckled edge */
+    content:""; position:absolute; inset:0; border-radius:6px;
+    box-shadow:0 0 0 1px rgba(140,110,50,.15) inset;
+    pointer-events:none;
   }
-  input:focus{border-color:var(--accent)}
+
+  /* ---------- LOGIN ---------- */
+  #login{ text-align:center }
+  .seal{
+    width:64px; height:64px; margin:0 auto 18px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #d06a4f, var(--seal));
+    box-shadow:0 4px 10px rgba(120,40,20,.35), 0 0 0 2px rgba(255,255,255,.15) inset;
+    display:grid; place-items:center;
+    color:#fbe9d0; font-size:26px;
+  }
+  #login h1{
+    font-family:"Dancing Script",cursive; font-weight:700;
+    font-size:34px; margin:0 0 4px; color:var(--ink);
+  }
+  #login p.sub{ margin:0 0 22px; color:var(--ink-soft); font-size:15px }
+  .field{ text-align:left; max-width:320px; margin:0 auto }
+  label{ display:block; font-size:13px; color:var(--ink-soft); margin:0 0 6px; letter-spacing:.2px }
+  input[type=text]{
+    width:100%; padding:13px 14px; border-radius:10px;
+    border:1px solid #cbb787; background:#fffdf6; color:var(--ink);
+    font-size:16px; outline:none; font-family:inherit;
+  }
+  input:focus{ border-color:var(--seal); box-shadow:0 0 0 3px rgba(181,72,47,.15) }
   button{
-    width:100%; margin-top:16px; padding:12px 14px; border:0; border-radius:10px;
-    background:var(--accent); color:var(--accent-ink); font-size:15px; font-weight:600;
-    cursor:pointer;
+    width:100%; max-width:320px; margin:16px auto 0; display:block;
+    padding:13px 16px; border:0; border-radius:10px;
+    background:var(--seal); color:#fdeede; font-size:16px; font-weight:600;
+    cursor:pointer; font-family:inherit; letter-spacing:.3px;
   }
-  button:hover{filter:brightness(1.05)}
-  .err{color:var(--err); font-size:13px; min-height:18px; margin-top:10px}
-  /* Message screen */
-  #message{display:none; text-align:center}
-  #message h2{margin:0 0 12px; font-size:22px}
-  #message .body{color:var(--muted); font-size:15px; line-height:1.6}
-  .logout{
-    margin-top:24px; background:transparent; border:1px solid var(--line); color:var(--muted);
-    font-weight:500;
+  button:hover{ filter:brightness(1.05) }
+  .err{ color:var(--seal); font-size:13.5px; min-height:18px; margin-top:12px; text-align:center }
+
+  /* ---------- LETTER ---------- */
+  #message{ display:none }
+  .letter-date{
+    font-family:"Caveat",cursive; font-size:22px; color:var(--ink-soft);
+    text-align:right; margin:0 0 10px;
   }
-  .logout:hover{filter:none; border-color:var(--accent); color:var(--ink)}
+  .letter{
+    font-family:"Caveat",cursive;
+    font-size:25px; line-height:1.62; color:var(--ink);
+    white-space:pre-wrap;           /* keep the line breaks from the letter */
+    word-break:break-word;
+  }
+  .sign{
+    font-family:"Dancing Script",cursive; font-weight:700;
+    font-size:30px; color:var(--ink); margin-top:6px;
+  }
+  .divider{
+    text-align:center; color:var(--line); letter-spacing:6px;
+    margin:26px 0 4px; font-size:14px;
+  }
+  .replay{
+    margin:22px auto 0; display:block; width:auto;
+    background:transparent; color:var(--ink-soft); border:1px solid #cbb787;
+    font-weight:500; padding:9px 18px; max-width:none;
+  }
+  .replay:hover{ filter:none; border-color:var(--seal); color:var(--ink) }
+
+  @media (max-width:480px){
+    .sheet{ padding:34px 24px 30px }
+    .letter{ font-size:23px }
+  }
 </style>
 </head>
 <body>
-  <main class="card">
-    <!-- LOGIN SCREEN -->
+  <main class="sheet">
+
+    <!-- ================= LOGIN ================= -->
     <section id="login">
-      <h1>Welcome</h1>
-      <p class="sub">Please enter the password to continue.</p>
+      <div class="seal">✉</div>
+      <h1>A letter for you</h1>
+      <p class="sub">Enter our word to open it.</p>
       <form id="loginForm" autocomplete="off">
-        <label for="pw">Password</label>
-        <input id="pw" type="password" autofocus>
-        <button type="submit">Enter</button>
+        <div class="field">
+          <label for="pw">Password</label>
+          <input id="pw" type="text" inputmode="text"
+                 autocapitalize="none" autocorrect="off" spellcheck="false" autofocus>
+        </div>
+        <button type="submit">Open the letter</button>
         <div class="err" id="err"></div>
       </form>
     </section>
 
-    <!-- MESSAGE SCREEN -->
+    <!-- ================= LETTER ================= -->
     <section id="message">
-      <h2>You're in! 🎉</h2>
-      <div class="body">
-        This is your placeholder message. Replace this text with whatever
-        you'd like people to see after they log in.
-      </div>
-      <button class="logout" id="logout">Log out</button>
+      <p class="letter-date">written with love ✒</p>
+
+      <div class="letter">My dearest bestest cuzzie,
+
+Fr, the last few weeks were really rough on me. So when I couldn’t seem to reach you, it hit harder than I expected. Having my calls declined a few times in a row and never getting a call back genuinely stung. I don’t think you meant anything by it—it was probably just the wrong timing. But after a while, I got exhausted trying to reach out, so I stepped back for a bit.
+
+You know you mean a lot to me. I genuinely enjoy our random calls and hearing about everything going on in your life—your adventures, your relationships, your challenges… all of it.
+
+So during my little emo phase, I decided to shift my focus into something else. And this here is my attempt at it: building a website.
+
+Anyway, I really missed you, bro. Let’s connect properly soon.
+
+Yours truly,</div>
+      <div class="sign">Zac</div>
+
+      <div class="divider">◆ ◆ ◆</div>
+      <button class="replay" id="close">Close letter</button>
     </section>
+
   </main>
 
 <script>
-  // ── SETTINGS ────────────────────────────────────────────────
-  // Change this to set the password everyone shares:
-  const PASSWORD = "letmein";
-  // ────────────────────────────────────────────────────────────
-  //
-  // NOTE: This is a "simple gate." The password lives in this file,
-  // so anyone who views the page source could find it. It keeps casual
-  // visitors out — it is NOT strong security for sensitive information.
+  // ── The shared word to open the letter ──
+  const PASSWORD = "mybestestcuzzie";
+  // Forgiving match: ignores capital letters and stray spaces so nobody
+  // gets locked out by a phone keyboard.
+  const normalize = s => s.trim().toLowerCase().replace(/\s+/g, "");
 
   const login   = document.getElementById("login");
   const message = document.getElementById("message");
@@ -87,24 +167,25 @@
   const pw      = document.getElementById("pw");
   const err     = document.getElementById("err");
 
-  function show(section){
-    login.style.display   = section === "login"   ? "block" : "none";
-    message.style.display = section === "message" ? "block" : "none";
+  function show(which){
+    login.style.display   = which === "login"  ? "block" : "none";
+    message.style.display = which === "letter" ? "block" : "none";
+    if (which === "letter") window.scrollTo(0, 0);
   }
 
   form.addEventListener("submit", function(e){
     e.preventDefault();
-    if (pw.value === PASSWORD){
+    if (normalize(pw.value) === normalize(PASSWORD)){
       err.textContent = "";
       pw.value = "";
-      show("message");
+      show("letter");
     } else {
-      err.textContent = "Incorrect password. Please try again.";
+      err.textContent = "That's not quite the word. Try again 💛";
       pw.select();
     }
   });
 
-  document.getElementById("logout").addEventListener("click", function(){
+  document.getElementById("close").addEventListener("click", function(){
     show("login");
     pw.focus();
   });
