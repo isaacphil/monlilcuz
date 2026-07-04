@@ -1,0 +1,10 @@
+# Only publish the letter page. Keep repo/plumbing files off the public site.
+.git
+.git/**
+.github
+.gitignore
+.assetsignore
+.wrangler
+wrangler.jsonc
+wrangler.toml
+README.md
