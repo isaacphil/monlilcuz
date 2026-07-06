@@ -17,10 +17,26 @@
   }
   body {
     display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  main {
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 24px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  footer {
+    flex-shrink: 0;
+    padding: 0 24px 26px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6b7278;
   }
   .card {
     max-width: 380px;
@@ -73,17 +89,20 @@
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="label">A letter for you</div>
-    <div class="divider"></div>
-    <div class="seal">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a5257" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-        <path d="M3 7l9 6 9-6"></path>
-      </svg>
+  <main>
+    <div class="card">
+      <div class="label">A letter for you</div>
+      <div class="divider"></div>
+      <div class="seal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a5257" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <path d="M3 7l9 6 9-6"></path>
+        </svg>
+      </div>
+      <h1>🚨 ACCESS DENIED 🚨</h1>
+      <p>Your VIP reading privileges have been revoked due to chronic procrastination. To appeal this decision, please submit a formal apology to the Sovereign.</p>
     </div>
-    <h1>🚨 ACCESS DENIED 🚨</h1>
-    <p>Your VIP reading privileges have been revoked due to chronic procrastination. To appeal this decision, please submit a formal apology to the Sovereign.</p>
-  </div>
+  </main>
+  <footer>© 2026 &nbsp;·&nbsp; Website by Isaac Philip</footer>
 </body>
 </html>
