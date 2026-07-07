@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // Error sink persists across replaceWith since it's on window, not the DOM.
   window.addEventListener('error', function(e) {
+    // Visitor-facing: don't render the dev error overlay. Log quietly instead.
+    try { if (window.console && console.error) console.error('[letter]', e && (e.message || e.error)); } catch (_) {}
+    return;
     var p = document.body || document.documentElement;
     var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
     d.id = '__bundler_err';
