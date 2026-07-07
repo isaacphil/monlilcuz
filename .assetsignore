@@ -7,4 +7,6 @@
 .wrangler
 wrangler.jsonc
 wrangler.toml
+worker.js
+TRACKING.md
 README.md
