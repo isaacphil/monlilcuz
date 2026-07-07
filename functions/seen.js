@@ -1,30 +1,20 @@
-// Cloudflare Worker for the letter site.
+// Cloudflare Pages Function — handles the read-receipt beacons at /seen.
 //
-// Two jobs:
-//   1. Serve the static site (index.html) via the ASSETS binding.
-//   2. Answer the read-receipt beacons the page fires at /__seen and forward
-//      a notification to your chat (Discord by default, Telegram optional).
+// The letter page (index.html) pings this at two moments:
+//   /seen?e=load    -> the page was opened (lock screen shown)
+//   /seen?e=unlock  -> the correct code was entered and the letter opened
 //
-// The webhook/token lives in a Worker *secret*, never in the published HTML or
-// in git. Set it once with:
-//   npx wrangler secret put DISCORD_WEBHOOK
-// (or TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID for Telegram — see notify() below).
+// This forwards a notification to your Discord (or Telegram). The webhook
+// lives in an encrypted Pages *secret* named DISCORD_WEBHOOK, set in the
+// Cloudflare dashboard — it never appears in this file, the site, or git.
 
-export default {
-  async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
-    if (url.pathname === "/__seen") {
-      // Do the notify work in the background so the beacon returns instantly.
-      ctx.waitUntil(notify(request, env, url));
-      return new Response(null, { status: 204 });
-    }
-
-    // Everything else: serve the static site.
-    if (env.ASSETS) return env.ASSETS.fetch(request);
-    return new Response("Not found", { status: 404 });
-  },
-};
+export async function onRequest(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  // Notify in the background so the beacon returns immediately.
+  context.waitUntil(notify(request, env, url));
+  return new Response(null, { status: 204 });
+}
 
 async function notify(request, env, url) {
   const ev = url.searchParams.get("e") || "visit";

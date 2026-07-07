@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       var key = '__seen_' + ev;
       if (ev === 'load' && sessionStorage.getItem(key)) return; // once per tab session
       try { sessionStorage.setItem(key, '1'); } catch (_) {}
-      var url = '/__seen?e=' + encodeURIComponent(ev) + '&t=' + Date.now();
+      var url = '/seen?e=' + encodeURIComponent(ev) + '&t=' + Date.now();
       if (navigator.sendBeacon) navigator.sendBeacon(url);
       else fetch(url, { method: 'POST', keepalive: true, mode: 'no-cors' });
     } catch (_) {}
