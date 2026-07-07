@@ -1,4 +1,5 @@
 // Cloudflare Pages Function — handles the read-receipt beacons at /seen.
+// (Deployed with KV storage + /log viewer enabled.)
 //
 // The letter page (index.html) pings this at two moments:
 //   /seen?e=load    -> the page was opened (lock screen shown)
