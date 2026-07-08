@@ -8,6 +8,10 @@
 //
 // Fail-open by design: if the status file can't be read for any reason, the
 // site stays ON. The owner's /log viewer is always reachable, even when paused.
+//
+// When paused, a visit to the burned page is still logged to KV and sent to
+// Discord (event "offline") — so you're notified even though the letter's own
+// beacons never run.
 
 export async function onRequest(context) {
   const { request, next, env } = context;
@@ -32,6 +36,12 @@ export async function onRequest(context) {
   }
 
   if (paused) {
+    // Still notify + log when someone lands on the burned page. Only count real
+    // page views (HTML navigations), not favicons or other sub-resources.
+    const accept = request.headers.get("accept") || "";
+    if (request.method === "GET" && accept.includes("text/html")) {
+      context.waitUntil(recordOffline(request, env));
+    }
     return new Response(OFFLINE_HTML, {
       status: 503,
       headers: {
@@ -43,6 +53,71 @@ export async function onRequest(context) {
   }
 
   return next();
+}
+
+// --- offline-visit tracking (self-contained; mirrors functions/seen.js) -----
+async function recordOffline(request, env) {
+  const cf = request.cf || {};
+  const rec = {
+    ev: "offline",
+    ts: Date.now(),
+    tz: cf.timezone || null,
+    ip: request.headers.get("CF-Connecting-IP") || null,
+    city: cf.city || null,
+    region: cf.region || null,
+    country: cf.country || null,
+    colo: cf.colo || null,
+    ua: (request.headers.get("user-agent") || "").slice(0, 400) || null,
+    ref: request.headers.get("referer") || null,
+  };
+  await Promise.allSettled([persist(env, rec), notify(env, rec)]);
+}
+
+async function persist(env, rec) {
+  if (!env.SEEN_LOG) return;
+  const key = `evt:${String(rec.ts).padStart(15, "0")}:${crypto.randomUUID().slice(0, 8)}`;
+  const meta = {
+    ev: rec.ev, ts: rec.ts, tz: rec.tz, ip: rec.ip,
+    city: rec.city, region: rec.region, country: rec.country,
+    ua: (rec.ua || "").slice(0, 220),
+  };
+  await env.SEEN_LOG.put(key, JSON.stringify(rec), { metadata: meta });
+}
+
+function fmt(ts, tz) {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "medium", timeStyle: "medium", timeZone: tz || "UTC",
+    }).format(new Date(ts));
+  } catch (_) {
+    return new Date(ts).toISOString();
+  }
+}
+
+async function notify(env, rec) {
+  const hook = env.DISCORD_WEBHOOK;
+  if (!hook) return;
+  const where = [rec.city, rec.region, rec.country].filter(Boolean).join(", ") || "unknown";
+  const theirWhen = fmt(rec.ts, rec.tz) + (rec.tz ? ` (${rec.tz})` : " (UTC*)");
+  const utcWhen = new Date(rec.ts).toISOString().replace("T", " ").slice(0, 19) + " UTC";
+  const yourWhen = env.OWNER_TZ ? `${fmt(rec.ts, env.OWNER_TZ)} (${env.OWNER_TZ})` : null;
+
+  const fields = [
+    { name: "🕒 Their local time", value: theirWhen, inline: false },
+    ...(yourWhen ? [{ name: "🏠 Your local time", value: yourWhen, inline: false }] : []),
+    { name: "UTC", value: utcWhen, inline: true },
+    { name: "📍 Where", value: where, inline: true },
+    { name: "🌐 IP", value: rec.ip || "unknown", inline: true },
+    { name: "💻 Device", value: (rec.ua || "unknown").slice(0, 300), inline: false },
+  ];
+
+  await fetch(hook, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      embeds: [{ title: "🔥 Someone hit the burned page (site is off)", color: 0xd9534f, fields }],
+    }),
+  });
 }
 
 const OFFLINE_HTML = `<!doctype html>
