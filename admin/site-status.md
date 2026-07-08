@@ -8,4 +8,4 @@ To pause or resume the site, change ONLY the one word on the last line:
 
 Then commit. The change goes live in about a minute.
 
-Status: off
+Status: on
