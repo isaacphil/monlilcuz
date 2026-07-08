@@ -75,7 +75,8 @@ async function notify(env, rec) {
     rec.ev === "unlock" ? "🔓 Letter UNLOCKED — they read it"
     : rec.ev === "load" ? "👀 Letter visited (lock screen shown)"
     : rec.ev === "login" ? "✍️ Entering the passcode (trying to log in)"
-    : rec.ev === "close" ? "🚪 They closed / left the letter"
+    : rec.ev === "close" ? "🔙 Closed the letter (back to login screen)"
+    : rec.ev === "exit" ? "👋 Left the webpage (closed the tab)"
     : "📩 " + rec.ev;
 
   const fields = [
@@ -96,7 +97,8 @@ async function notify(env, rec) {
         color:
           rec.ev === "unlock" ? 0x39b37a
           : rec.ev === "login" ? 0x4a90d9
-          : rec.ev === "close" ? 0x7a8290
+          : rec.ev === "close" ? 0xb0862f
+          : rec.ev === "exit" ? 0x7a8290
           : 0xc9a53f,
         fields,
       }],

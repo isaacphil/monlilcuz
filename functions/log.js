@@ -117,7 +117,7 @@ for(const r of DATA){
   if(r.ev==='unlock') unlocks++; else if(r.ev==='login') logins++; else if(r.ev==='load') opens++;
   const tr=document.createElement('tr');
   tr.className = r.ev==='unlock' ? 'unlock' : '';
-  const label = r.ev==='unlock' ? '🔓 Unlocked' : r.ev==='load' ? '👀 Visited' : r.ev==='login' ? '✍️ Entering code' : r.ev==='close' ? '🚪 Left / closed' : r.ev==='offline' ? '🔥 Hit burned page' : ('📩 '+r.ev);
+  const label = r.ev==='unlock' ? '🔓 Unlocked' : r.ev==='load' ? '👀 Visited' : r.ev==='login' ? '✍️ Entering code' : r.ev==='close' ? '🔙 Closed letter' : r.ev==='exit' ? '👋 Left webpage' : r.ev==='offline' ? '🔥 Hit burned page' : ('📩 '+r.ev);
   tr.appendChild(td(label));
   tr.appendChild(td(fmt(r.ts, r.tz) + (r.tz?'':' (UTC?)'), r.tz||'timezone unknown'));
   tr.appendChild(td(fmt(r.ts, yourTz)));

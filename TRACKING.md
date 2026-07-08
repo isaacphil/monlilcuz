@@ -12,10 +12,13 @@ Know when the letter is opened and unlocked — get a Discord ping in the moment
   fires once per tab session). This is the "reached the login and is trying"
   signal — distinct from just landing (`load`) and from a successful open.
 - `e=unlock` — the correct code is entered and the letter opens (**logged in**)
-- `e=close` — the visitor leaves or closes the page (fires once, on the first
-  `pagehide` / tab-hidden signal — reliable on desktop and mobile)
+- `e=close` — they click **close inside the letter**, returning to the login
+  screen (fires each time; they may open/close more than once)
+- `e=exit` — they **leave or close the webpage** entirely (fires once, on the
+  first `pagehide` / tab-hidden signal — reliable on desktop and mobile)
 
-Together these form a funnel: **visited → entering code → unlocked → left.**
+Together these form a funnel: **visited → entering code → unlocked → closed
+letter → left the site.**
 
 When the site is switched **off**, a visit to the burned page is logged and
 pinged to Discord as `e=offline` (handled by `functions/_middleware.js`).
