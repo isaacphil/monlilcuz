@@ -73,7 +73,8 @@ async function notify(env, rec) {
 
   const title =
     rec.ev === "unlock" ? "🔓 Letter UNLOCKED — they read it"
-    : rec.ev === "load" ? "👀 Letter opened (lock screen shown)"
+    : rec.ev === "load" ? "👀 Letter visited (lock screen shown)"
+    : rec.ev === "login" ? "✍️ Entering the passcode (trying to log in)"
     : rec.ev === "close" ? "🚪 They closed / left the letter"
     : "📩 " + rec.ev;
 
@@ -92,7 +93,11 @@ async function notify(env, rec) {
     body: JSON.stringify({
       embeds: [{
         title,
-        color: rec.ev === "unlock" ? 0x39b37a : rec.ev === "close" ? 0x7a8290 : 0xc9a53f,
+        color:
+          rec.ev === "unlock" ? 0x39b37a
+          : rec.ev === "login" ? 0x4a90d9
+          : rec.ev === "close" ? 0x7a8290
+          : 0xc9a53f,
         fields,
       }],
     }),

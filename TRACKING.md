@@ -7,10 +7,15 @@ Know when the letter is opened and unlocked — get a Discord ping in the moment
 
 `index.html` fires a beacon to `/seen` at these moments:
 
-- `e=load` — the page is opened (lock/login screen appears)
-- `e=unlock` — the correct code is entered and the letter opens (login)
+- `e=load` — the page is **visited** (lock screen appears)
+- `e=login` — the visitor **starts entering the passcode** (first keystroke;
+  fires once per tab session). This is the "reached the login and is trying"
+  signal — distinct from just landing (`load`) and from a successful open.
+- `e=unlock` — the correct code is entered and the letter opens (**logged in**)
 - `e=close` — the visitor leaves or closes the page (fires once, on the first
   `pagehide` / tab-hidden signal — reliable on desktop and mobile)
+
+Together these form a funnel: **visited → entering code → unlocked → left.**
 
 When the site is switched **off**, a visit to the burned page is logged and
 pinged to Discord as `e=offline` (handled by `functions/_middleware.js`).

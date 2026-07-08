@@ -112,12 +112,12 @@ function shortUA(ua){
 function td(text, title){ const c=document.createElement('td'); c.textContent=text; if(title) c.title=title; return c; }
 
 const tb = document.querySelector('#tbl tbody');
-let opens=0, unlocks=0;
+let opens=0, logins=0, unlocks=0;
 for(const r of DATA){
-  if(r.ev==='unlock') unlocks++; else if(r.ev==='load') opens++;
+  if(r.ev==='unlock') unlocks++; else if(r.ev==='login') logins++; else if(r.ev==='load') opens++;
   const tr=document.createElement('tr');
   tr.className = r.ev==='unlock' ? 'unlock' : '';
-  const label = r.ev==='unlock' ? '🔓 Unlocked' : r.ev==='load' ? '👀 Opened' : r.ev==='close' ? '🚪 Left / closed' : r.ev==='offline' ? '🔥 Hit burned page' : ('📩 '+r.ev);
+  const label = r.ev==='unlock' ? '🔓 Unlocked' : r.ev==='load' ? '👀 Visited' : r.ev==='login' ? '✍️ Entering code' : r.ev==='close' ? '🚪 Left / closed' : r.ev==='offline' ? '🔥 Hit burned page' : ('📩 '+r.ev);
   tr.appendChild(td(label));
   tr.appendChild(td(fmt(r.ts, r.tz) + (r.tz?'':' (UTC?)'), r.tz||'timezone unknown'));
   tr.appendChild(td(fmt(r.ts, yourTz)));
@@ -128,7 +128,7 @@ for(const r of DATA){
   tb.appendChild(tr);
 }
 document.getElementById('summary').textContent =
-  DATA.length + ' events · ' + opens + ' opens · ' + unlocks + ' unlocks' +
+  DATA.length + ' events · ' + opens + ' visits · ' + logins + ' entering · ' + unlocks + ' unlocks' +
   (DATA.length ? ' · latest ' + fmt(DATA[0].ts, yourTz) : '');
 if(!DATA.length){
   const tr=document.createElement('tr');
