@@ -55,9 +55,9 @@ const OFFLINE_HTML = `<!doctype html>
   body { min-height:100vh; display:flex; align-items:center; justify-content:center;
     background:#faf9f5; color:#4a463d; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     padding:24px; }
-  .card { max-width:420px; text-align:center; }
-  .mark { font-size:44px; margin-bottom:18px; }
-  h1 { font-size:22px; font-weight:600; margin-bottom:10px; letter-spacing:.2px; }
+  .card { max-width:480px; text-align:center; }
+  .mark { font-size:44px; margin-bottom:20px; }
+  .lead { font-size:17px; font-weight:600; line-height:1.55; margin-bottom:14px; color:#4a463d; }
   p { font-size:15px; line-height:1.6; color:#7a756a; }
   @media (prefers-color-scheme: dark) {
     body { background:#16150f; color:#e9e5d8; }
@@ -65,7 +65,7 @@ const OFFLINE_HTML = `<!doctype html>
   }
 </style>
 <div class="card">
-  <div class="mark">💌</div>
-  <h1>This letter is resting for a moment</h1>
-  <p>It's just paused for now — please check back a little later.</p>
+  <div class="mark">🔥</div>
+  <p class="lead">This letter contained a deeply personal sharing and a rare window of raw honesty. Because real vulnerability belongs strictly to the moment, the letter has now been burned.</p>
+  <p>If you missed the window, it is what it is. Thanks for checking in anyway.</p>
 </div>`;

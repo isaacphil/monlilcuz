@@ -7,9 +7,10 @@ The whole site has one master power switch: the file `admin/site-status.md`,
 whose last line reads either `Status: on` or `Status: off`.
 
 - **`on`**  → the letter is live as normal.
-- **`off`** → every visitor sees a short *"this letter is resting"* notice
-  instead. **Nothing is lost** — the letter, the code, the tracking and the log
-  all stay exactly as they are. Flipping back to `on` restores everything.
+- **`off`** → every visitor sees the *"the letter has been burned"* notice
+  instead. **Nothing is actually lost** — the letter, the code, the tracking and
+  the log all stay exactly as they are behind the scenes. Flipping back to `on`
+  restores everything.
 
 > ⚠️ Use **this** switch, not Cloudflare. Editing the file is the clean, supported
 > way to pause the site.
