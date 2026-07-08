@@ -52,20 +52,28 @@ const OFFLINE_HTML = `<!doctype html>
 <title>A letter for you</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:#faf9f5; color:#4a463d; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    padding:24px; }
-  .card { max-width:480px; text-align:center; }
-  .mark { font-size:44px; margin-bottom:20px; }
-  .lead { font-size:17px; font-weight:600; line-height:1.55; margin-bottom:14px; color:#4a463d; }
-  p { font-size:15px; line-height:1.6; color:#7a756a; }
+  body { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:#faf9f5; color:#3a372f; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    padding:48px 24px 72px; }
+  .card { max-width:540px; text-align:center; }
+  .mark { font-size:48px; margin-bottom:24px; }
+  .lead { font-size:18px; font-weight:600; line-height:1.62; margin-bottom:16px; color:#33302a; }
+  .card p { font-size:16px; line-height:1.65; color:#6f6a5e; }
+  .sig { margin-top:22px; font-size:16px; font-style:italic; color:#4a463d; }
+  footer { position:fixed; bottom:0; left:0; right:0; text-align:center; padding:14px 12px;
+    font-size:11px; font-weight:500; letter-spacing:1.4px; text-transform:uppercase; color:#b3ab98; }
   @media (prefers-color-scheme: dark) {
     body { background:#16150f; color:#e9e5d8; }
-    p { color:#a49d8c; }
+    .lead { color:#efeadd; }
+    .card p { color:#a49d8c; }
+    .sig { color:#d8d2c2; }
+    footer { color:#6a6350; }
   }
 </style>
 <div class="card">
-  <div class="mark">🔥</div>
-  <p class="lead">This letter contained a deeply personal sharing and a rare window of raw honesty. Because real vulnerability belongs strictly to the moment, the letter has now been burned.</p>
+  <div class="mark">\u{1F525}</div>
+  <p class="lead">This letter contained a deeply personal sharing and a rare window of raw honesty meant only for my closest cousin. Because real vulnerability belongs strictly to the moment, the letter has now been burned.</p>
   <p>If you missed the window, it is what it is. Thanks for checking in anyway.</p>
-</div>`;
+  <p class="sig">~ Zac</p>
+</div>
+<footer>\u00A9 2026 \u00B7 Website by Isaac Philip</footer>`;
