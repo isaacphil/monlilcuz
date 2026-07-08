@@ -47,6 +47,22 @@ document.addEventListener('DOMContentLoaded', async function() {
   };
   window.__seen('load');
 
+  // --- "left / closed the letter" beacon ---
+  // Fire once, on the first reliable "page is going away" signal. pagehide
+  // covers real unloads/navigation (incl. bfcache); visibilitychange->hidden
+  // is the dependable fallback on mobile, where pagehide/beforeunload often
+  // don't fire. Deduped so we send at most one "close" per page view.
+  var __closeSent = false;
+  function __sendClose() {
+    if (__closeSent) return;
+    __closeSent = true;
+    try { window.__seen('close'); } catch (_) {}
+  }
+  window.addEventListener('pagehide', __sendClose);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') __sendClose();
+  });
+
   const loading = document.getElementById('__bundler_loading');
   function setStatus(msg) { if (loading) loading.textContent = msg; }
 

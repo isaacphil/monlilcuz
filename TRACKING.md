@@ -5,10 +5,15 @@ Know when the letter is opened and unlocked — get a Discord ping in the moment
 
 ## How it works
 
-`index.html` fires a beacon to `/seen` at two moments:
+`index.html` fires a beacon to `/seen` at these moments:
 
-- `e=load` — the page is opened (lock screen appears)
-- `e=unlock` — the correct code is entered and the letter opens
+- `e=load` — the page is opened (lock/login screen appears)
+- `e=unlock` — the correct code is entered and the letter opens (login)
+- `e=close` — the visitor leaves or closes the page (fires once, on the first
+  `pagehide` / tab-hidden signal — reliable on desktop and mobile)
+
+When the site is switched **off**, a visit to the burned page is logged and
+pinged to Discord as `e=offline` (handled by `functions/_middleware.js`).
 
 `functions/seen.js` (a Cloudflare Pages Function) then:
 
