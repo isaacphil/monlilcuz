@@ -147,8 +147,6 @@ const OFFLINE_HTML = `<!doctype html>
 </style>
 <div class="card">
   <div class="mark">\u{1F525}</div>
-  <p class="lead">This letter contained a deeply personal sharing and a rare window of raw honesty meant only for my closest cousin. Because real vulnerability belongs strictly to the moment, the letter has now been burned.</p>
-  <p>If you missed the window, it is what it is. Thanks for checking in anyway.</p>
-  <p class="sig">~ Zac</p>
+  <p class="lead">This letter has now been burned. Thank you.</p>
 </div>
 <footer>\u00A9 2026 \u00B7 Website by Isaac Philip</footer>`;
